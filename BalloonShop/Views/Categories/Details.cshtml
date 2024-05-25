@@ -1,0 +1,42 @@
+﻿@model BalloonShop.Models.Category
+
+@{
+    ViewData["Title"] = "Category Details";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>@Model.Name</h2>
+            <img src="@Model.Image" alt="@Model.Name" class="img-thumbnail" height="45" />
+            <p>@Model.Description</p>
+
+            <h3>Subcategories:</h3>
+            <div class="list-group">
+                @foreach (var subCategory in Model.SubCategories)
+                {
+                    <a asp-action="Details" asp-controller="Categories" asp-route-id="@subCategory.SubCategoryId" class="list-group-item list-group-item-action">
+                        <img src="@subCategory.Image" alt="@subCategory.Name" class="img-thumbnail" style="width: 50px; height: 50px; margin-right: 10px;" />
+                        <strong>@subCategory.Name</strong>
+                        <p>@subCategory.Description</p>
+                    </a>
+
+                    <h4>Products:</h4>
+                    <div class="list-group">
+                        @foreach (var product in subCategory.Products)
+                        {
+                            <a asp-action="Details" asp-controller="Products" asp-route-id="@product.ProductId" class="list-group-item list-group-item-action">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">@product.Name</h5>
+                                    <small>Price: @product.Price.ToString("C")</small>
+                                </div>
+                                <p class="mb-1">Manufacturer: @product.Manufacturer</p>
+                                <small>Available: @(product.IsAvailable ? "Yes" : "No")</small>
+                            </a>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,103 @@
+﻿@using BalloonShop.Data
+@using Microsoft.EntityFrameworkCore
+
+@inject ShopDbContext _context;
+@{
+    var categories = _context.Categories.Include(c => c.SubCategories).ToList();
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - BalloonShop</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/BalloonShop.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="\image\photo_2024-05-09_00-15-38.jpg" style="height: 40px; width: auto; margin-right: 5px;">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Categories" asp-action="Index">Categories</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Products" asp-action="Index">Products</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="AdminPanel" asp-action="Index">Admin Panel</a>
+                        </li>
+                       @*  @if (categories != null )
+                        {
+                            foreach (var category in categories)
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown_@category.CategoryId" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        @category.Name @category.SubCategories.Count
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        @foreach (var subCategory in category.SubCategories)
+                                        {
+                                            <li>
+                                                <a class="dropdown-item" asp-controller="Home" asp-action="ProductsBySubCategory" asp-route-subCategoryId="@subCategory.SubCategoryId">@subCategory.Name</a>
+                                            </li>
+                                        }
+                                    </ul>
+                                </li>
+                              
+                            } 
+                        }*@
+                        @if (categories != null )
+                        {
+                            foreach (var category in categories)
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        @category.Name
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        @foreach (var subCategory in category.SubCategories)
+                                        {
+                                            <li><a class="dropdown-item" asp-controller="Products" asp-action="ProductsBySubCategory" asp-route-subCategoryId="@subCategory.SubCategoryId">@subCategory.Name</a></li>
+                                        }
+                                    </ul>
+                                </li>
+                            }
+                        }
+                        
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2024 - BalloonShop - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

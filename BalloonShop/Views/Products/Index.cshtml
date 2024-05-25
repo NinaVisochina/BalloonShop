@@ -1,0 +1,72 @@
+﻿@model IEnumerable<BalloonShop.Models.Product>
+
+@{
+    ViewData["Title"] = "Products";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="text-center my-3">
+    <h1 class="display-4 my-2">Welcome to Balloons Catalog</h1>
+   @*  <form class="d-flex mb-5 gap-2" asp-action="Filter" ms-auto>
+        <select name="categoryId" asp-items=ViewBag.Categories id="inputState" class="form-select">
+            <option selected>All Categories</option>
+        </select> *@
+        <form method="get" asp-action="Index">
+            <div class="form-group">
+                <label for="subCategoryId">Filter by SubCategory</label>
+                <select id="subCategoryId" name="subCategoryId" class="form-control" asp-items="ViewBag.Categories">
+                    <option value="">All SubCategory</option>
+                </select>
+            </div>
+        <button type="submit" class="btn btn-secondary">Filter</button>
+    </form>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        @foreach (var product in Model)
+        {
+            <a asp-action="Details" asp-route-id="@product.ProductId">
+            <div class="col">
+                <div class="card h-100">
+                    <img height="240" src="@product.Image" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">@product.Manufacturer</h5>
+                        <p class="card-text">
+                            @product.Color / @(product.Size ?? null)
+                        </p>
+                        <p class="card-text">
+                            @(product.Price)грн - @product.SubCategory?.Name
+                        </p>
+                    </div>
+
+                    @* <form asp-controller="Cart" asp-action="Append" method="post" class="card-footer d-flex justify-content-between">
+                        <input name="quantity" style="width: 100px" type="number" min="1" value="1" class="form-control">
+                        <input type="hidden" name="id" value="@i.Id" />
+                        <button type="submit" class="btn btn-primary">Add to Cart</button>
+                    </form> *@
+                </div>
+            </div>
+            </a>
+        }
+    </div>
+
+@* <div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Products</h2>
+            <div class="list-group">
+                @foreach (var product in Model)
+                {
+                    <a asp-action="Details" asp-route-id="@product.ProductId" class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">@product.Name</h5>
+                            <small>Price: @product.Price.ToString("C")</small>
+                        </div>
+                        <p class="mb-1">Manufacturer: @product.Manufacturer</p>
+                        <small>Available: @(product.IsAvailable ? "Yes" : "No")</small>
+                    </a>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+ *@

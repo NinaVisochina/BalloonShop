@@ -1,0 +1,94 @@
+﻿@model BalloonShop.Models.Product
+
+@{
+    ViewData["Title"] = Model.Name;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <img src="@Model.Image" alt="@Model.Name" class="img-fluid" />
+        </div>
+        <div class="col-md-6">
+            <h1 class="display-5">@Model.Name</h1>
+            <p><strong>Виробники:</strong> @Model.Manufacturer</p>
+            <p><strong>Модель:</strong> @Model.Model</p>
+            <p>
+                @if (Model.IsAvailable)
+                {
+                    <span class="badge bg-primary">Є в наявності</span>
+                }
+                else
+                {
+                    <span class="badge bg-danger">Немає в наявності</span>
+                }
+            </p>
+            <h4 class="text-muted">@Model.Price &#8372</h4>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <button class="btn btn-outline-secondary" type="button" id="button-decrement">-</button>
+                </div>
+                <input type="text"  class="form-control" id="quantity" value="1" />
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" id="button-increment">+</button>
+                </div>
+            </div>
+            <button class="btn btn-primary">Купити</button>
+            <button class="btn btn-secondary">Додати до бажань</button>
+            <button class="btn btn-secondary">Додати до порівнянь</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('button-decrement').addEventListener('click', function () {
+        var quantityInput = document.getElementById('quantity');
+        var currentValue = parseInt(quantityInput.value);
+        if (currentValue > 1) {
+            quantityInput.value = currentValue - 1;
+        }
+    });
+
+    document.getElementById('button-increment').addEventListener('click', function () {
+        var quantityInput = document.getElementById('quantity');
+        quantityInput.value = parseInt(quantityInput.value) + 1;
+    });
+</script>
+
+@* 
+@{
+    ViewData["Title"] = "Product Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>@Model.Name</h2>
+            <img src="@Model.Image" alt="@Model.Name"  height="45" />
+            <p>@Model.Description</p>
+            <p><strong>Manufacturer:</strong> @Model.Manufacturer</p>
+            <p><strong>Price:</strong> @Model.Price.ToString("C")</p>
+            <p><strong>Available:</strong> @(Model.IsAvailable ? "Yes" : "No")</p>
+            <p><strong>Model:</strong> @Model.Model</p>
+            <p><strong>Date Added:</strong> @Model.DateAdded.ToString("d")</p>
+
+            @if (Model.DateModified.HasValue)
+            {
+                <p><strong>Date Modified:</strong> @Model.DateModified.Value.ToString("d")</p>
+            }
+
+            @if (Model is BalloonShop.Models.BalloonProduct)
+            {
+                var balloon = Model as BalloonShop.Models.BalloonProduct;
+                <p><strong>Type:</strong> @balloon.Type</p>
+                <p><strong>Quantity in Pack:</strong> @balloon.QuantityInPack</p>
+                <p><strong>Form:</strong> @balloon.Form</p>
+            }
+        </div>
+    </div>
+</div>
+ *@
+
+

@@ -1,0 +1,23 @@
+﻿@model IEnumerable<BalloonShop.Models.Category>
+
+@{
+    ViewData["Title"] = "Categories";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Categories</h2>
+            <div class="list-group">
+                @foreach (var category in Model)
+                {
+                    <a asp-action="Details" asp-route-id="@category.CategoryId" class="list-group-item list-group-item-action">
+                        <img src="@category.Image" alt="@category.Name" class="img-thumbnail" style="width: 50px; height: 50px; margin-right: 10px;" />
+                        <strong>@category.Name</strong>
+                        <p>@category.Description</p>
+                    </a>
+                }
+            </div>
+        </div>
+    </div>
+</div>
