@@ -8,11 +8,62 @@
     <div class="row">
         <div class="col-md-12">
             <h2>@Model.Name</h2>
-            <img src="@Model.Image" alt="@Model.Name" class="img-thumbnail" height="45" />
-            <p>@Model.Description</p>
+            <div class="container py-5">
+                <div class="row">
+                    @foreach (var subCategory in Model.SubCategories)
+                    {
+                        <div class="col-lg-3 col-md-6 mb-4">
+                            <div class="card h-100">
+                                <img src="@subCategory.Image" alt="@subCategory.Name" class="card-img-top" style="height: 270px; object-fit: cover;" />
+                                <div class="card-body text-center d-flex flex-column">
+                                    <h5 class="card-title">@subCategory.Name</h5>
+                                    <p class="card-text">@subCategory.Description</p>
+                                    <div class="mt-auto">
+                                        <a href="@Url.Action("ProductsBySubCategory", "Products", new { subCategoryId = subCategory.SubCategoryId })" class="btn btn-primary">перейти ⟶</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
 
-            <h3>Subcategories:</h3>
-            <div class="list-group">
+            <style>
+                .card {
+                    border: none;
+                    border-radius: 15px;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                    transition: transform 0.2s;
+                }
+
+                    .card:hover {
+                        transform: translateY(-10px);
+                    }
+
+                .card-body {
+                    background-color: #ff6337;
+                    color: white;
+                    border-bottom-left-radius: 15px;
+                    border-bottom-right-radius: 15px;
+                }
+
+                .btn-primary {
+                    background-color: white;
+                    color: #ff6337;
+                    border: none;
+                    padding: 10px 20px;
+                    border-radius: 25px;
+                    font-size: 1rem;
+                    font-weight: bold;
+                    transition: background-color 0.2s, color 0.2s;
+                }
+
+                    .btn-primary:hover {
+                        background-color: #ff6337;
+                        color: white;
+                    }
+            </style>
+           @*  <div class="list-group">
                 @foreach (var subCategory in Model.SubCategories)
                 {
                     <a asp-action="Details" asp-controller="Categories" asp-route-id="@subCategory.SubCategoryId" class="list-group-item list-group-item-action">
@@ -36,7 +87,7 @@
                         }
                     </div>
                 }
-            </div>
+            </div> *@
         </div>
     </div>
 </div>

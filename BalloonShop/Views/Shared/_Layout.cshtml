@@ -41,26 +41,6 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="AdminPanel" asp-action="Index">Admin Panel</a>
                         </li>
-                       @*  @if (categories != null )
-                        {
-                            foreach (var category in categories)
-                            {
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown_@category.CategoryId" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        @category.Name @category.SubCategories.Count
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        @foreach (var subCategory in category.SubCategories)
-                                        {
-                                            <li>
-                                                <a class="dropdown-item" asp-controller="Home" asp-action="ProductsBySubCategory" asp-route-subCategoryId="@subCategory.SubCategoryId">@subCategory.Name</a>
-                                            </li>
-                                        }
-                                    </ul>
-                                </li>
-                              
-                            } 
-                        }*@
                         @if (categories != null )
                         {
                             foreach (var category in categories)
