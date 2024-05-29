@@ -22,10 +22,7 @@ namespace BalloonShop.Data
             modelBuilder.Entity<Product>()
                 .Property(p => p.Price)
                 .HasColumnType("decimal(18,2)");
-
-            modelBuilder.Entity<Product>()
-                .HasDiscriminator<string>("ProductType")
-                .HasValue<Product>("Product");
+            modelBuilder.Entity<Product>().ToTable("Products");
         }
     }
 }

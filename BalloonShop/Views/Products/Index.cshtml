@@ -23,7 +23,7 @@
     <div class="row row-cols-1 row-cols-md-3 g-4">
         @foreach (var product in Model)
         {
-            <a asp-action="Details" asp-route-id="@product.ProductId">
+            @* <a asp-action="Details" asp-route-id="@product.ProductId"> *@
             <div class="col">
                 <div class="card h-100">
                     <img height="240" src="@product.Image" class="card-img-top" alt="...">
@@ -37,14 +37,15 @@
                         </p>
                     </div>
 
-                    @* <form asp-controller="Cart" asp-action="Append" method="post" class="card-footer d-flex justify-content-between">
+                        <form asp-controller="Cart" asp-action="AddToCart" method="post" class="card-footer d-flex justify-content-between">
                         <input name="quantity" style="width: 100px" type="number" min="1" value="1" class="form-control">
-                        <input type="hidden" name="id" value="@i.Id" />
-                        <button type="submit" class="btn btn-primary">Add to Cart</button>
-                    </form> *@
+                            <input type="hidden" name="id" value="@product.ProductId" />
+                        <button type="submit" class="btn btn-primary">Купити</button>
+                    </form>
+                    <a href="@Url.Action("Details", "Products", new { id = product.ProductId })" class="btn btn-primary">Деталі</a>
                 </div>
             </div>
-            </a>
+            @* </a> *@
         }
     </div>
 

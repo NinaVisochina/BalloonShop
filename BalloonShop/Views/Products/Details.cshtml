@@ -25,7 +25,12 @@
                 }
             </p>
             <h4 class="text-muted">@Model.Price &#8372</h4>
-            <div class="input-group mb-3">
+            <form asp-controller="Cart" asp-action="AddToCart" method="post" class="card-footer d-flex justify-content-between">
+                <input name="quantity" style="width: 100px" type="number" min="1" value="1" class="form-control">
+                <input type="hidden" name="id" value="@Model.ProductId" />
+                @* <button type="submit" class="btn btn-primary">Add to Cart</button> *@
+           
+            @* <div class="input-group mb-3">
                 <div class="input-group-prepend">
                     <button class="btn btn-outline-secondary" type="button" id="button-decrement">-</button>
                 </div>
@@ -33,8 +38,9 @@
                 <div class="input-group-append">
                     <button class="btn btn-outline-secondary" type="button" id="button-increment">+</button>
                 </div>
-            </div>
+            </div> *@
             <button class="btn btn-primary">Купити</button>
+            </form>
             <button class="btn btn-secondary">Додати до бажань</button>
             <button class="btn btn-secondary">Додати до порівнянь</button>
         </div>

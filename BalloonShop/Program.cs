@@ -1,4 +1,6 @@
 using BalloonShop.Data;
+using BalloonShop.Services;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,11 +8,12 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddControllersWithViews();
-
+builder.Services.AddHttpContextAccessor(); // Додано для доступу до контексту HTTP
+builder.Services.AddSession();
 // Configure Entity Framework Core with SQL Server
 builder.Services.AddDbContext<ShopDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
+builder.Services.AddScoped<ICartService, CartService>();
 var app = builder.Build();
 
 // Seed the database
@@ -40,7 +43,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseSession();
 app.UseAuthorization();
 
 app.MapControllerRoute(
