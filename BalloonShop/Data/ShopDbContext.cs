@@ -15,7 +15,6 @@ namespace BalloonShop.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<SubCategory> SubCategories { get; set; }
         public DbSet<Product> Products { get; set; }
-        public DbSet<BalloonProduct> BalloonProducts { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -26,8 +25,7 @@ namespace BalloonShop.Data
 
             modelBuilder.Entity<Product>()
                 .HasDiscriminator<string>("ProductType")
-                .HasValue<Product>("Product")
-                .HasValue<BalloonProduct>("BalloonProduct");
+                .HasValue<Product>("Product");
         }
     }
 }

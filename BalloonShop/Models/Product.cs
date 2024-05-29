@@ -14,10 +14,16 @@ namespace BalloonShop.Models
         public string? Size { get; set; }
         public string? Color { get; set; }
         [Required]
+        public string? Type { get; set; }
+
+        [Required]
+        public string? Form { get; set; }
+        [Required]
         [DataType(DataType.Currency)]
         public decimal Price { get; set; }
         [Required]
         public int QuantityInPack { get; set; }
+        public int QuantityInStock { get; set; }
         public bool IsAvailable { get; set; }
         [Required]
         public string Model { get; set; }
