@@ -1,39 +1,67 @@
-﻿@model List<BalloonShop.Models.Product>
+﻿@model List<BalloonShop.Models.CartItem>
 
 @{
-    ViewData["Title"] = "Cart";
+    ViewData["Title"] = "Мій кошик";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="container">
-    <h2>Your Cart</h2>
+    <h2>Список товарів</h2>
     @if (Model.Count == 0)
     {
-        <p>Your cart is empty.</p>
+        <p>Ваш кошик порожній.</p>
     }
     else
     {
         <table class="table">
             <thead>
                 <tr>
-                    <th>Product</th>
-                    <th>Price</th>
+                    <th>№</th>
+                    <th>Назва</th>
+                    <th>Кількість</th>
+                    <th>Ціна</th>
+                    <th>Сума</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var product in Model)
+                @for (var i = 0; i < Model.Count; i++)
                 {
                     <tr>
-                        <td>@product.Name</td>
-                        <td>@product.Price.ToString("C")</td>
+                        <td>@(i + 1)</td>
                         <td>
-                            <a href="@Url.Action("RemoveFromCart", new { productId = product.ProductId })" class="btn btn-danger">Remove</a>
+                            <img src="@Model[i].Product.Image" style="height: 50px; width: 50px;" />
+                            @Model[i].Product.Name
+                        </td>
+                        <td>
+                            <form asp-action="UpdateQuantity" method="post" class="d-inline">
+                                <input type="hidden" name="id" value="@Model[i].ProductId" />
+                                <div class="input-group">
+                                    <button class="btn btn-outline-secondary" type="submit" name="quantity" value="@(Model[i].Quantity - 1)">-</button>
+                                    <input type="text" class="form-control text-center" value="@Model[i].Quantity" readonly style="max-width: 50px;" />
+                                    <button class="btn btn-outline-secondary" type="submit" name="quantity" value="@(Model[i].Quantity + 1)">+</button>
+                                </div>
+                            </form>
+                        </td>
+                        <td>@Model[i].Product.Price.ToString("C")</td>
+                        <td>@(Model[i].Product.Price * Model[i].Quantity).ToString("C")</td>
+                        <td>
+                            <form asp-action="RemoveFromCart" method="post">
+                                <input type="hidden" name="id" value="@Model[i].ProductId" />
+                                <button type="submit" class="btn btn-danger">×</button>
+                            </form>
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
-        <a href="@Url.Action("ClearCart")" class="btn btn-warning">Clear Cart</a>
+        <div class="d-flex justify-content-between align-items-center">
+            <h4>Загальна сума: @ViewBag.Total.ToString("C")</h4>
+            <div>
+                <a asp-action="ClearCart" class="btn btn-danger">Очистити кошик</a>
+                <a href="#" class="btn btn-primary">Підтвердити замовлення</a>
+            </div>
+        </div>
     }
 </div>
+

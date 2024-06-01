@@ -1,4 +1,4 @@
-﻿@using BalloonShop.Data
+﻿@* @using BalloonShop.Data
 @using Microsoft.EntityFrameworkCore
 
 @inject ShopDbContext _context;
@@ -15,14 +15,30 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/BalloonShop.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.3/font/bootstrap-icons.min.css">
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
+    <header class="header-custom">
+        <div class="container-fluid bg-white border-bottom box-shadow mb-3" >
+            <div class="row align-items-center py-2">
+                <div class="col-md-4">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
                     <img src="\image\photo_2024-05-09_00-15-38.jpg" style="height: 40px; width: auto; margin-right: 5px;">
+                        <span >BalloonShop</span>
                 </a>
+                </div>
+                <div class="col-md-4 text-center">
+                    <span style="color: RGB(199, 162, 199)">+38 (068) 022-76-08</span>
+                </div>
+                <div class="col-md-4 text-end">
+                    <a href="@Url.Action("Index", "Cart")" class="text-decoration-none">
+                        <i class="bi bi-cart"></i> Корзина
+                    </a>
+                </div>
+            </div>
+        </div>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid"> 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -30,7 +46,7 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index"><i class="bi bi-house-door"></i></a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Categories" asp-action="Index">Categories</a>
@@ -58,12 +74,111 @@
                                 </li>
                             }
                         }
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Cart" asp-action="Index">Cart
-
-                            </a>
-                        </li>
                     </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2024 - BalloonShop - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+ *@
+  @using BalloonShop.Data
+@using Microsoft.EntityFrameworkCore
+
+@inject ShopDbContext _context;
+@{
+    var categories = _context.Categories.Include(c => c.SubCategories).ToList();
+}
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - BalloonShop</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/BalloonShop.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.3/font/bootstrap-icons.min.css">
+</head>
+<body>
+    <header class="header-custom">
+        <div class="container-fluid border-bottom box-shadow mb-3">
+            <div class="row align-items-center py-2">
+                <div class="col-md-4">
+                    <a class="navbar-brand d-flex align-items-center" asp-area="" asp-controller="Home" asp-action="Index">
+                        <img src="\image\photo_2024-05-09_00-15-38.jpg" style="height: 50px; width: auto; margin-right: 5px;">
+                        <span >BalloonShop</span>
+                    </a>
+                </div>
+                <div class="col-md-4 text-center">
+                    <span style="color: RGB(199, 162, 199);">+38 (068) 022-76-08</span>
+                </div>
+                <div class="col-md-4 text-end">
+                    <a href="@Url.Action("Index", "Cart")" class="text-decoration-none">
+                        <i class="bi bi-cart"></i> Корзина
+                    </a>
+                </div>
+            </div>
+        </div>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">
+                                <i class="bi bi-house-door fs-2"></i>
+                                </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Categories" asp-action="Index">Categories</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Products" asp-action="Index">Products</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="AdminPanel" asp-action="Index">Admin Panel</a>
+                        </li>
+                        @if (categories != null )
+                        {
+                            foreach (var category in categories)
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        @category.Name
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        @foreach (var subCategory in category.SubCategories)
+                                        {
+                                            <li><a class="dropdown-item" asp-controller="Products" asp-action="ProductsBySubCategory" asp-route-subCategoryId="@subCategory.SubCategoryId">@subCategory.Name</a></li>
+                                        }
+                                    </ul>
+                                </li>
+                            }
+                        }
+                    </ul>
+                    <form class="d-flex search-box" asp-controller="Products" asp-action="Search" method="get">
+                        <input class="form-control" type="search" name="query" placeholder="Пошук" aria-label="Search">
+                        <button class="btn" type="submit"><i class="bi bi-search"></i></button>
+                    </form>
                 </div>
             </div>
         </nav>

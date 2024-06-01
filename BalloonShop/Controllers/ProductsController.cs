@@ -29,6 +29,9 @@ namespace BalloonShop.Controllers
         }
         public IActionResult ProductsBySubCategory(int subCategoryId)
         {
+            var subcategories = new SelectList(_context.SubCategories.ToList(), nameof(SubCategory.SubCategoryId), nameof(SubCategory.Name));
+            ViewBag.Categories = subcategories;
+
             var products = _context.Products
                                    .Include(p => p.SubCategory)
                                    .Where(p => p.SubCategoryId == subCategoryId)
@@ -47,6 +50,14 @@ namespace BalloonShop.Controllers
             }
 
             return View(product);
+        }
+        public IActionResult Search(string query)
+        {
+            var products = _context.Products
+                                   .Where(p => p.Name.Contains(query) || p.Description.Contains(query))
+                                   .ToList();
+
+            return View("Index", products);
         }
     }
 }

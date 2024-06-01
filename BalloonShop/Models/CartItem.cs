@@ -14,6 +14,7 @@
         public int Discount { get; set; }
         public bool IsAvailable { get; set; }
         public string Image { get; set; }
+        public Product Product { get; set; }
         public string SubCategoryName { get; set; }  
     }
 }

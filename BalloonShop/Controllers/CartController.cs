@@ -1,24 +1,25 @@
-﻿using BalloonShop.Data;
+﻿using Microsoft.AspNetCore.Mvc;
+using BalloonShop.Data;
 using BalloonShop.Models;
 using BalloonShop.Services;
-using Microsoft.AspNetCore.Mvc;
 
 namespace BalloonShop.Controllers
 {
     public class CartController : Controller
     {
-        private readonly ICartService _cartService;
         private readonly ShopDbContext _context;
+        private readonly ICartService _cartService;
 
-        public CartController(ICartService cartService, ShopDbContext context)
+        public CartController(ShopDbContext context, ICartService cartService)
         {
-            _cartService = cartService;
             _context = context;
+            _cartService = cartService;
         }
 
         public IActionResult Index()
         {
             var cart = _cartService.GetCart();
+            ViewBag.Total = _cartService.GetTotal();
             return View(cart);
         }
 
@@ -28,17 +29,22 @@ namespace BalloonShop.Controllers
             var product = _context.Products.Find(id);
             if (product != null)
             {
-                for (int i = 0; i < quantity; i++)
-                {
-                    _cartService.AddToCart(product);
-                }
+                _cartService.AddToCart(product, quantity);
             }
             return RedirectToAction("Index");
         }
 
-        public IActionResult RemoveFromCart(int productId)
+        [HttpPost]
+        public IActionResult RemoveFromCart(int id)
         {
-            _cartService.RemoveFromCart(productId);
+            _cartService.RemoveFromCart(id);
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public IActionResult UpdateQuantity(int id, int quantity)
+        {
+            _cartService.UpdateQuantity(id, quantity);
             return RedirectToAction("Index");
         }
 
@@ -49,5 +55,6 @@ namespace BalloonShop.Controllers
         }
     }
 }
+
 
 
