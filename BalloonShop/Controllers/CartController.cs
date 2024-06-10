@@ -23,6 +23,16 @@ namespace BalloonShop.Controllers
             return View(cart);
         }
 
+        //[HttpPost]
+        //public IActionResult AddToCart(int id, int quantity)
+        //{
+        //    var product = _context.Products.Find(id);
+        //    if (product != null)
+        //    {
+        //        _cartService.AddToCart(product, quantity);
+        //    }
+        //    return RedirectToAction("Index","Products");
+        //}
         [HttpPost]
         public IActionResult AddToCart(int id, int quantity)
         {
@@ -30,9 +40,15 @@ namespace BalloonShop.Controllers
             if (product != null)
             {
                 _cartService.AddToCart(product, quantity);
+                return Json(new
+                {
+                    success = true,
+                    message = $"Товар {product.Name} в кількості {quantity} шт. додано до кошика!"
+                });
             }
-            return RedirectToAction("Index");
+            return Json(new { success = false, message = "Товар не знайдено." });
         }
+
 
         [HttpPost]
         public IActionResult RemoveFromCart(int id)

@@ -4,64 +4,260 @@
     ViewData["Title"] = "Products";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<div class="text-center my-3">
-    <h1 class="display-4 my-2">Welcome to Balloons Catalog</h1>
-    <form class="d-flex mb-5 gap-2" method="get" asp-action="Index" ms-auto>
-            <div class="form-group">
-            <select id="subCategoryId" name="subCategoryId" class="form-select" asp-items="ViewBag.Categories" id="inputState" class="form-select">
-                <option selected="">Всі категорії</option>
-                </select>
-            </div>
-        <button type="submit" class="btn btn-secondary">Filter</button>
-    </form>
-    <div class="row row-cols-1 row-cols-md-3 g-4">
-        @foreach (var product in Model)
-        {
-            <div class="col">
-                <div class="card h-100">
-                    <img height="240" src="@product.Image" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title">@product.Manufacturer</h5>
-                        <p class="card-text">
-                            @product.Color / @(product.Size ?? null)
-                        </p>
-                        <p class="card-text">
-                            @(product.Price)грн - @product.SubCategory?.Name
-                        </p>
+<div class="container">
+    <h1 class="display-4 my-4 text-center">Каталог повітряних куль</h1>
+    <div class="row">
+        <div class="col-md-3">
+            <h3>
+                <a class="btn btn-link" data-bs-toggle="collapse" href="#filterContent" role="button" aria-expanded="false" aria-controls="filterContent">
+                    Фільтр <span class="bi bi-chevron-down"></span>
+                </a>
+            </h3>
+            <div class="collapse" id="filterContent">
+                <form method="get" asp-action="Index">
+                    <div class="form-group">
+                        <a class="btn btn-link text" data-bs-toggle="collapse" href="#collapseManufacturers" role="button" aria-expanded="false" aria-controls="collapseManufacturers">
+                            Виробники <span class="bi bi-chevron-down"></span>
+                        </a>
+                        <div class="collapse show" id="collapseManufacturers">
+                            @if (ViewBag.Manufacturers != null)
+                            {
+                                @foreach (var manufacturer in ViewBag.Manufacturers as List<string>)
+                                {
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="manufacturers" value="@manufacturer" id="@manufacturer">
+                                        <label class="form-check-label text" for="@manufacturer">
+                                            @manufacturer
+                                        </label>
+                                    </div>
+                                }
+                            }
+                        </div>
                     </div>
 
-                        <form asp-controller="Cart" asp-action="AddToCart" method="post" class="card-footer d-flex justify-content-between">
-                        <input name="quantity" style="width: 100px" type="number" min="1" value="1" class="form-control">
-                            <input type="hidden" name="id" value="@product.ProductId" />
-                        <button type="submit" class="btn btn-primary">Купити</button>
-                    </form>
-                    <a href="@Url.Action("Details", "Products", new { id = product.ProductId })" class="btn btn-primary">Деталі</a>
-                </div>
-            </div>
-            @* </a> *@
-        }
-    </div>
+                    <div class="form-group">
+                        <a class="btn btn-link text" data-bs-toggle="collapse" href="#collapseSizes" role="button" aria-expanded="false" aria-controls="collapseSizes">
+                            Розміри <span class="bi bi-chevron-down"></span>
+                        </a>
+                        <div class="collapse show" id="collapseSizes">
+                            @if (ViewBag.Sizes != null)
+                            {
+                                @foreach (var size in ViewBag.Sizes as List<string>)
+                                {
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="sizes" value="@size" id="@size">
+                                        <label class="form-check-label text" for="@size">
+                                            @size
+                                        </label>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
 
-@* <div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <h2>Products</h2>
-            <div class="list-group">
+                    <button type="submit" class="btn btn-secondary mt-2">Фільтр</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            <div class="row row-cols-1 row-cols-md-3 g-4">
                 @foreach (var product in Model)
                 {
-                    <a asp-action="Details" asp-route-id="@product.ProductId" class="list-group-item list-group-item-action">
-                        <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-1">@product.Name</h5>
-                            <small>Price: @product.Price.ToString("C")</small>
+                    <div class="col">
+                        <div class="card h-100">
+                            <img height="240" src="@product.Image" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title">@product.Manufacturer</h5>
+                                <p class="card-text">
+                                    @product.Color / @(product.Size ?? null)
+                                </p>
+                                <p class="card-text">
+                                    @(product.Price) грн - @product.SubCategory?.Name
+                                </p>
+                            </div>
+                            <form asp-controller="Cart" asp-action="AddToCart" method="post" class="card-footer d-flex justify-content-between add-to-cart-form">
+                                <input name="quantity" style="width: 100px" type="number" min="1" value="1" class="form-control">
+                                <input type="hidden" name="id" value="@product.ProductId" />
+                                <button type="submit" class="btn btn-primary buy-button">Купити</button>
+                            </form>
+                            <a href="@Url.Action("Details", "Products", new { id = product.ProductId })" class="btn btn-primary">Деталі</a>
                         </div>
-                        <p class="mb-1">Manufacturer: @product.Manufacturer</p>
-                        <small>Available: @(product.IsAvailable ? "Yes" : "No")</small>
-                    </a>
+                    </div>
                 }
             </div>
         </div>
     </div>
 </div>
 
- *@
+
+    @* <div class="row">
+        <div class="col-md-3">
+            <h3>
+                <a class="btn btn-link" data-bs-toggle="collapse" href="#filterContent" role="button" aria-expanded="false" aria-controls="filterContent">
+                    Фільтр <span class="bi bi-chevron-down"></span>
+                </a>
+            </h3>
+            <div class="collapse" id="filterContent">
+                <form method="get" asp-action="Index">
+                    <div class="form-group">
+                        <a class="btn btn-link text" data-bs-toggle="collapse" href="#collapseManufacturers" role="button" aria-expanded="false" aria-controls="collapseManufacturers">
+                            Виробники <span class="bi bi-chevron-down"></span>
+                        </a>
+                        <div class="collapse show" id="collapseManufacturers">
+                            @if (ViewBag.Manufacturers != null)
+                            {
+                                @foreach (var manufacturer in ViewBag.Manufacturers as List<string>)
+                                {
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="manufacturers" value="@manufacturer" id="@manufacturer">
+                                        <label class="form-check-label text" for="@manufacturer">
+                                            @manufacturer
+                                        </label>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <a class="btn btn-link text" data-bs-toggle="collapse" href="#collapseSizes" role="button" aria-expanded="false" aria-controls="collapseSizes">
+                            Розміри <span class="bi bi-chevron-down"></span>
+                        </a>
+                        <div class="collapse show" id="collapseSizes">
+                            @if (ViewBag.Sizes != null)
+                            {
+                                @foreach (var size in ViewBag.Sizes as List<string>)
+                                {
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="sizes" value="@size" id="@size">
+                                        <label class="form-check-label text" for="@size">
+                                            @size
+                                        </label>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-secondary mt-2">Фільтр</button>
+                </form>
+            </div>
+           
+        <div class="col-md-9">
+            <h1 class="display-4 my-2 text-center">Каталог повітряних куль</h1>
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+                @foreach (var product in Model)
+                {
+                    <div class="col">
+                        <div class="card h-100">
+                            <img height="240" src="@product.Image" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title">@product.Manufacturer</h5>
+                                <p class="card-text">
+                                    @product.Color / @(product.Size ?? null)
+                                </p>
+                                <p class="card-text">
+                                    @(product.Price)грн - @product.SubCategory?.Name
+                                </p>
+                            </div>
+                            <form asp-controller="Cart" asp-action="AddToCart" method="post" class="card-footer d-flex justify-content-between add-to-cart-form">
+                                <input name="quantity" style="width: 100px" type="number" min="1" value="1" class="form-control">
+                                <input type="hidden" name="id" value="@product.ProductId" />
+                                <button type="submit" class="btn btn-primary buy-button">Купити</button>
+                            </form>
+
+                            <a href="@Url.Action("Details", "Products", new { id = product.ProductId })" class="btn btn-primary">Деталі</a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>  *@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Підключення CSS Toastr -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+
+<!-- Підключення JS Toastr -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.add-to-cart-form').submit(function (event) {
+            event.preventDefault();
+
+            var form = $(this);
+            var formData = form.serialize();
+
+            $.ajax({
+                url: form.attr('action'),
+                type: form.attr('method'),
+                data: formData,
+                success: function (response) {
+                    if (response.success) {
+                        toastr.success(response.message);
+                        // Можна оновити кошик на сторінці, якщо потрібно
+                    } else {
+                        toastr.error(response.message);
+                    }
+                },
+                error: function () {
+                    toastr.error('Виникла помилка при додаванні товару до кошика.');
+                }
+            });
+        });
+    });
+</script>
+
+    @* <h3>Фільтр</h3>
+    <form method="get" asp-action="Index"> *@
+    @* <div class="form-group">
+    <label for="subCategoryId">Фільтр за підкатегорією</label>
+    <select id="subCategoryId" name="subCategoryId" class="form-control" asp-items="ViewBag.Categories">
+    <option value="">Всі підкатегорії</option>
+    </select>
+    </div> *@
+
+    @*  <div class="form-group">
+    <a class="btn btn-link text" data-bs-toggle="collapse" href="#collapseManufacturers" role="button" aria-expanded="false" aria-controls="collapseManufacturers">
+    Виробники <span class="bi bi-chevron-down"></span>
+    </a>
+    <div class="collapse show" id="collapseManufacturers">
+    @if (ViewBag.Manufacturers != null)
+    {
+    @foreach (var manufacturer in ViewBag.Manufacturers as List<string>)
+    {
+    <div class="form-check">
+    <input class="form-check-input" type="checkbox" name="manufacturers" value="@manufacturer" id="@manufacturer">
+    <label class="form-check-label text" for="@manufacturer">
+    @manufacturer
+    </label>
+    </div>
+    }
+    }
+    </div>
+    </div>
+
+    <div class="form-group">
+    <a class="btn btn-link text" data-bs-toggle="collapse" href="#collapseSizes" role="button" aria-expanded="false" aria-controls="collapseSizes">
+    Розміри <span class="bi bi-chevron-down"></span>
+    </a>
+    <div class="collapse show" id="collapseSizes">
+    @if (ViewBag.Sizes != null)
+    {
+    @foreach (var size in ViewBag.Sizes as List<string>)
+    {
+    <div class="form-check">
+    <input class="form-check-input" type="checkbox" name="sizes" value="@size" id="@size">
+    <label class="form-check-label text" for="@size">
+    @size
+    </label>
+    </div>
+    }
+    }
+    </div>
+    </div>
+
+    <button type="submit" class="btn btn-secondary mt-2">Фільтр</button>
+    </form>
+    </div> *@

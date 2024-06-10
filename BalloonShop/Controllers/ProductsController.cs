@@ -14,7 +14,7 @@ namespace BalloonShop.Controllers
         {
             _context = context;
         }
-        public IActionResult Index(int? subCategoryId)
+        public IActionResult Index(int? subCategoryId, string[] manufacturers, string[] sizes)
         {
             var subcategories = new SelectList(_context.SubCategories.ToList(), nameof(SubCategory.SubCategoryId), nameof(SubCategory.Name));
             ViewBag.Categories = subcategories;
@@ -25,7 +25,31 @@ namespace BalloonShop.Controllers
             {
                 products = products.Where(p => p.SubCategoryId == subCategoryId.Value);
             }
-            return View(products.ToList()); 
+
+            if (manufacturers != null && manufacturers.Length > 0)
+            {
+                products = products.Where(p => manufacturers.Contains(p.Manufacturer));
+            }
+
+            if (sizes != null && sizes.Length > 0)
+            {
+                products = products.Where(p => sizes.Contains(p.Size));
+            }
+
+            var manufacturerList = _context.Products
+                .Select(p => p.Manufacturer)
+                .Distinct()
+                .ToList();
+
+            var sizeList = _context.Products
+                .Select(p => p.Size)
+                .Distinct()
+                .ToList();
+
+            ViewBag.Manufacturers = manufacturerList;
+            ViewBag.Sizes = sizeList;
+
+            return View(products.ToList());
         }
         public IActionResult ProductsBySubCategory(int subCategoryId)
         {
@@ -36,7 +60,18 @@ namespace BalloonShop.Controllers
                                    .Include(p => p.SubCategory)
                                    .Where(p => p.SubCategoryId == subCategoryId)
                                    .ToList();
+            var manufacturerList = _context.Products
+                .Select(p => p.Manufacturer)
+                .Distinct()
+                .ToList();
 
+            var sizeList = _context.Products
+                .Select(p => p.Size)
+                .Distinct()
+                .ToList();
+
+            ViewBag.Manufacturers = manufacturerList;
+            ViewBag.Sizes = sizeList;
 
             return View("Index", products);
         }
